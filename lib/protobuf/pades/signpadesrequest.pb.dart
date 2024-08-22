@@ -33,6 +33,9 @@ class Request extends $pb.GeneratedMessage {
     $core.bool? convert,
     $core.String? nombreDocumento,
     $core.String? contrasenaPdf,
+    $core.String? localizacion,
+    $core.String? zonaHoraria,
+    $core.bool? firmaBorde,
   }) {
     final $result = create();
     if (test != null) {
@@ -89,6 +92,15 @@ class Request extends $pb.GeneratedMessage {
     if (contrasenaPdf != null) {
       $result.contrasenaPdf = contrasenaPdf;
     }
+    if (localizacion != null) {
+      $result.localizacion = localizacion;
+    }
+    if (zonaHoraria != null) {
+      $result.zonaHoraria = zonaHoraria;
+    }
+    if (firmaBorde != null) {
+      $result.firmaBorde = firmaBorde;
+    }
     return $result;
   }
   Request._() : super();
@@ -114,6 +126,9 @@ class Request extends $pb.GeneratedMessage {
     ..aOB(16, _omitFieldNames ? '' : 'convert')
     ..aOS(17, _omitFieldNames ? '' : 'nombreDocumento', protoName: 'nombreDocumento')
     ..aOS(18, _omitFieldNames ? '' : 'contrasenaPdf', protoName: 'contrasenaPdf')
+    ..aOS(19, _omitFieldNames ? '' : 'localizacion')
+    ..aOS(20, _omitFieldNames ? '' : 'zonaHoraria', protoName: 'zonaHoraria')
+    ..aOB(21, _omitFieldNames ? '' : 'firmaBorde', protoName: 'firmaBorde')
     ..hasRequiredFields = false
   ;
 
@@ -301,6 +316,33 @@ class Request extends $pb.GeneratedMessage {
   $core.bool hasContrasenaPdf() => $_has(17);
   @$pb.TagNumber(18)
   void clearContrasenaPdf() => clearField(18);
+
+  @$pb.TagNumber(19)
+  $core.String get localizacion => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set localizacion($core.String v) { $_setString(18, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasLocalizacion() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearLocalizacion() => clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get zonaHoraria => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set zonaHoraria($core.String v) { $_setString(19, v); }
+  @$pb.TagNumber(20)
+  $core.bool hasZonaHoraria() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearZonaHoraria() => clearField(20);
+
+  @$pb.TagNumber(21)
+  $core.bool get firmaBorde => $_getBF(20);
+  @$pb.TagNumber(21)
+  set firmaBorde($core.bool v) { $_setBool(20, v); }
+  @$pb.TagNumber(21)
+  $core.bool hasFirmaBorde() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearFirmaBorde() => clearField(21);
 }
 
 class SignatureImage extends $pb.GeneratedMessage {

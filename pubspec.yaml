@@ -11,7 +11,9 @@ dependencies:
   dartz: ^0.10.1
   flutter:
     sdk: flutter
+  flutter_timezone: ^3.0.0
   http: ^1.2.2
+  pdf_render: ^1.4.10
   protobuf: ^3.1.0
 
 dev_dependencies:

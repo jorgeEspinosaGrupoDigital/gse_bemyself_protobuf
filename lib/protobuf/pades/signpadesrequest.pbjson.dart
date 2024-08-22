@@ -35,6 +35,9 @@ const Request$json = {
     {'1': 'convert', '3': 16, '4': 1, '5': 8, '10': 'convert'},
     {'1': 'nombreDocumento', '3': 17, '4': 1, '5': 9, '10': 'nombreDocumento'},
     {'1': 'contrasenaPdf', '3': 18, '4': 1, '5': 9, '10': 'contrasenaPdf'},
+    {'1': 'localizacion', '3': 19, '4': 1, '5': 9, '10': 'localizacion'},
+    {'1': 'zonaHoraria', '3': 20, '4': 1, '5': 9, '10': 'zonaHoraria'},
+    {'1': 'firmaBorde', '3': 21, '4': 1, '5': 8, '10': 'firmaBorde'},
   ],
 };
 
@@ -50,7 +53,8 @@ final $typed_data.Uint8List requestDescriptor = $convert.base64Decode(
     'EoCVIJYWxnb3JpdG1vEhYKBnVzZXJ3cxgOIAEoCVIGdXNlcndzEh4KCnBhc3N3b3Jkd3MYDyAB'
     'KAlSCnBhc3N3b3Jkd3MSGAoHY29udmVydBgQIAEoCFIHY29udmVydBIoCg9ub21icmVEb2N1bW'
     'VudG8YESABKAlSD25vbWJyZURvY3VtZW50bxIkCg1jb250cmFzZW5hUGRmGBIgASgJUg1jb250'
-    'cmFzZW5hUGRm');
+    'cmFzZW5hUGRmEiIKDGxvY2FsaXphY2lvbhgTIAEoCVIMbG9jYWxpemFjaW9uEiAKC3pvbmFIb3'
+    'JhcmlhGBQgASgJUgt6b25hSG9yYXJpYRIeCgpmaXJtYUJvcmRlGBUgASgIUgpmaXJtYUJvcmRl');
 
 @$core.Deprecated('Use signatureImageDescriptor instead')
 const SignatureImage$json = {
