@@ -21,6 +21,7 @@ class Response extends $pb.GeneratedMessage {
     $core.String? timestampDate,
     $core.String? signatureDate,
     $core.String? storedPath,
+    $core.Iterable<Signature>? signatures,
   }) {
     final $result = create();
     if (httpStatus != null) {
@@ -41,6 +42,9 @@ class Response extends $pb.GeneratedMessage {
     if (storedPath != null) {
       $result.storedPath = storedPath;
     }
+    if (signatures != null) {
+      $result.signatures.addAll(signatures);
+    }
     return $result;
   }
   Response._() : super();
@@ -54,6 +58,7 @@ class Response extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'timestampDate', protoName: 'timestampDate')
     ..aOS(5, _omitFieldNames ? '' : 'signatureDate', protoName: 'signatureDate')
     ..aOS(6, _omitFieldNames ? '' : 'storedPath', protoName: 'storedPath')
+    ..pc<Signature>(7, _omitFieldNames ? '' : 'signatures', $pb.PbFieldType.PM, subBuilder: Signature.create)
     ..hasRequiredFields = false
   ;
 
@@ -131,6 +136,53 @@ class Response extends $pb.GeneratedMessage {
   $core.bool hasStoredPath() => $_has(5);
   @$pb.TagNumber(6)
   void clearStoredPath() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.List<Signature> get signatures => $_getList(6);
+}
+
+class Signature extends $pb.GeneratedMessage {
+  factory Signature({
+    $core.Map<$core.String, $core.String>? fields,
+  }) {
+    final $result = create();
+    if (fields != null) {
+      $result.fields.addAll(fields);
+    }
+    return $result;
+  }
+  Signature._() : super();
+  factory Signature.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Signature.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Signature', createEmptyInstance: create)
+    ..m<$core.String, $core.String>(1, _omitFieldNames ? '' : 'fields', entryClassName: 'Signature.FieldsEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Signature clone() => Signature()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Signature copyWith(void Function(Signature) updates) => super.copyWith((message) => updates(message as Signature)) as Signature;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Signature create() => Signature._();
+  Signature createEmptyInstance() => create();
+  static $pb.PbList<Signature> createRepeated() => $pb.PbList<Signature>();
+  @$core.pragma('dart2js:noInline')
+  static Signature getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Signature>(create);
+  static Signature? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.Map<$core.String, $core.String> get fields => $_getMap(0);
 }
 
 

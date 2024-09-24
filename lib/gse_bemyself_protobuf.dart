@@ -7,7 +7,6 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:gse_bemyself_protobuf/protobuf/pades/signpadesrequest.pb.dart';
 import 'package:gse_bemyself_protobuf/protobuf/pades/signpadesrequest.pbserver.dart';
 import 'package:gse_bemyself_protobuf/protobuf/pades/signpadesresponse.pb.dart';
-import 'package:pdf_render/pdf_render.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -19,7 +18,8 @@ class ErrorProtobuf {
 
 class SuccessProtobuf {
   final Uint8List data;
-  const SuccessProtobuf(this.data);
+  final String signatures;
+  const SuccessProtobuf(this.data, this.signatures);
 }
 
 
@@ -30,8 +30,8 @@ class SignerProtobuf {
         required double y,
         required double width,
         required double height,
-        required double docWidth,
-        required double docHeight,
+        //required double docWidth,
+        //required double docHeight,
         required int pagina,
         required String user,
         required String password,
@@ -45,34 +45,45 @@ class SignerProtobuf {
         bool bordeFirma = false
       }
       ) async {
-    final (docW, docH) = await _getDocSize(data: docData, pagina: pagina);
-    final finalX = (x/docWidth) * docW;
-    final finalY = (y/docHeight) * docH;
-    final ancho = (width/docWidth) * docW;
-    final alto = (height/docHeight) * docH;
+    //final (docW, docH) = await _getDocSize(data: docData, pagina: pagina);
+    final finalX = x;//(x/docWidth) * docW;
+    final finalY = y;//(y/docHeight) * docH;
+    final ancho = width;//(width/docWidth) * docW;
+    final alto = height;//(height/docHeight) * docH;
+    /*print('x->$finalX');
+    print('y->$finalY');
+    print('w->$ancho');
+    print('h->$alto');*/
     final signatureImage = _getSignatureImage(x: finalX, y: finalY, alto: alto, ancho: ancho, pagina: pagina - 1);
     final req = await _getRequest(signatureImage: signatureImage, usuario: user, clave: password, docData: docData, qa: qa, tenantLanguage: tenantLanguage, bordeFirma: bordeFirma);
     final bytesBuffer = req.writeToBuffer();
     final Map<String, String> headers = _getHeaders(tenant: tenant, token: token, tenantlanguage: tenantLanguage, clientSerialID: clientSerialID, encryptedPass: password);
     final a = DateTime.now().millisecondsSinceEpoch;
+    print("_PROTOBUF_ clientSerialID: $clientSerialID");
     final response = await http.post(
         Uri.parse(url),
         headers: headers,
         body: bytesBuffer
     );
-    print("Tiempo peticion: ${DateTime.now().millisecondsSinceEpoch - a}");
+    print("_PROTOBUF_ Tiempo peticion: ${DateTime.now().millisecondsSinceEpoch - a}");
     if(response.headers["content-type"] != "application/octet-stream"){
       final responseJson = jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      final result = responseJson["result"] as Map<String, dynamic>;
+      print("_PROTOBUF_ Error petición: ${utf8.decode(response.bodyBytes)}");
+      final Map<String, dynamic> result = responseJson["result"] != null ? responseJson["result"] : responseJson["data"];
       final String message = result["message"];
       final int statusCode = result["codeValidate"];
       return Left(ErrorProtobuf(statusCode, message));
     }
     final protoResponse = Response.fromBuffer(response.bodyBytes);
+    final signatures = protoResponse.signatures;
+    List<Map<String,String>> mapSignatures = [];
+    for(int i = 0; i < signatures.length; i++){
+      mapSignatures.add(signatures[i].fields);
+    }
     if (protoResponse.httpStatus != 200){
       return Left(ErrorProtobuf(protoResponse.httpStatus, protoResponse.responseCode));
     }
-    return Right(SuccessProtobuf(Uint8List.fromList(protoResponse.message)));
+    return Right(SuccessProtobuf(Uint8List.fromList(protoResponse.message), jsonEncode(mapSignatures)));
   }
 
   static SignatureImage _getSignatureImage({
@@ -102,13 +113,14 @@ class SignerProtobuf {
     required bool bordeFirma
   })
   async {
+    final tz = await FlutterTimezone.getLocalTimezone();
     final req = Request();
     req.usuarioTSA = '9002042728'; //9002042728
-    req.clave = "nohayclave"; //16UYK9VRJ4
+    req.clave = clave; //16UYK9VRJ4
     req.numeroDocumento = usuario; //383430000
     req.claveTSA =
     'GaUZl13SLc/kB88gLYRUwhuRPsd1rNNyy8SY9O8E4URpopw54ZUL68U/2fsq+boYBSJ0TZX9K8wduJN+bXuRYWRlLUXpI5LdCL2/8oyshmc=';
-    req.ubicacion = 'Bogota';
+    req.ubicacion = tz;
     req.razon = 'Prueba de firmado';
     req.conLTV = true;
     req.conEstampa = false;
@@ -117,7 +129,7 @@ class SignerProtobuf {
     req.base64 = docData;
     req.test = qa;
     req.localizacion = tenantLanguage.toLowerCase();
-    req.zonaHoraria = await FlutterTimezone.getLocalTimezone();
+    req.zonaHoraria = tz;
     req.firmaBorde = bordeFirma;
     return req;
   }
@@ -139,12 +151,12 @@ class SignerProtobuf {
     };
   }
 
-  static Future<(double, double)> _getDocSize({required Uint8List data, required int pagina}) async {
+  /*static Future<(double, double)> _getDocSize({required Uint8List data, required int pagina}) async {
     final doc = await PdfDocument.openData(data);
     final pg = await doc.getPage(pagina);
     final docW = pg.width;
     final docH = pg.height;
     doc.dispose();
     return (docW, docH);
-  }
+  }*/
 }
