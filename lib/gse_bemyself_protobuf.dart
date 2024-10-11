@@ -2,6 +2,7 @@ library gse_bemyself_protobuf;
 
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:gse_bemyself_protobuf/protobuf/pades/signpadesrequest.pb.dart';
@@ -30,8 +31,7 @@ class SignerProtobuf {
         required double y,
         required double width,
         required double height,
-        //required double docWidth,
-        //required double docHeight,
+        required Size docSize,
         required int pagina,
         required String user,
         required String password,
@@ -47,7 +47,7 @@ class SignerProtobuf {
       ) async {
     //final (docW, docH) = await _getDocSize(data: docData, pagina: pagina);
     final finalX = x;//(x/docWidth) * docW;
-    final finalY = y;//(y/docHeight) * docH;
+    final finalY = y ;//- (docSize.height - 792);//(y/docHeight) * docH;
     final ancho = width;//(width/docWidth) * docW;
     final alto = height;//(height/docHeight) * docH;
     /*print('x->$finalX');
